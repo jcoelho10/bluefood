@@ -1,0 +1,65 @@
+Ciclo de Vida de Uma Entidade
+
+Entidade
+
+New (nova)
+//Entidade estado de Nova
+cliente c = new cliente()
+repository.save(c)
+
+//Quando eu chamo o .save()
+//Entidade passa para o estado (managed) Gerenciada
+Gerenciada pelo contexto da JPA
+
+-----------------------
+Detached (não-gerenciada)
+
+//Entidade continua no contexto de gerenciamento
+Cliente c = repository.findById(123);
+
+//Como está gerenciada, é auterado o BD de forma automática.
+c.setNome("Maria");
+reposito.delete(1);
+
+------------------------------------------------------------------
+Controller - É o cara que recebe a requisição da web
+Service - Quem executa a logica de negócio (ApplicationService)
+
+Métodos de Controller, trabalham com Entidades Não Gerenciadas.
+No Service, as Entidades são gerenciadas.
+
+	Controller                                    Service
+         Detached			       	     Gerenciada
+      (não gerenciada)				      (managed)
+
+public void m() {				public Cliente find(int id) {
+ Cliente c = service.find(123);    >>>>>>>	 Cliente c = repository.findById(id);
+}						 return c;
+						}
+
+No momento que eu jogo para o Controller, o (return c;).
+Eu tiro a Entidade do contexto de transação, que embloga apenas o service (normalmente é o padrão).
+Nesse ponto essa Entidade passa a ser "Detached (não-gerenciada)".
+Isso significa que se eu chamar no Controller
+
+"c.setNome("Paulo");"
+
+Ao ínves de chamar no Service, não vai acontecer nada se mudar o nome. 
+Vai mudar obviamente no objeto, o seu objeto vai está com as informações novas, mas essas 
+informações não serão refletidas no BD, porque estou mexendo em uma Entidade não gerenciada.
+
+A grosso modo:
+Dentro do Service está trabalhando com as informações (.save() ou .find()), é gerenciada.
+Saiu do Service e voltou para o Controller, é não gerenciada.
+
+"E se eu mexi no Controller e quero Salvar essa informação no BD?"
+
+Atualização manual. Ex:
+
+service.update(c);     >>>>>>    public void update(Cliente c) { 
+				  //Nessa momento a Entidade volta a ser gerenciada pela JPA
+				  repository.save(c);
+				 }
+
+
+
