@@ -2,10 +2,12 @@ package br.com.softblue.bluefood.domain.restaurante;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.softblue.bluefood.domain.usuario.Usuario;
 import br.com.softblue.bluefood.infrastructure.web.validator.UploadConstraint;
 import br.com.softblue.bluefood.util.FileType;
+import br.com.softblue.bluefood.util.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,28 +40,56 @@ import lombok.ToString;
 public class Restaurante extends Usuario {
 
 	@NotBlank(message = "O CNPJ nao pode ser vazio")
-	@Pattern(regexp = "[0-9]{14}", message = "O CNPJ possui formato inv�lido")
+	@Pattern(regexp = "[0-9]{14}", message = "O CNPJ possui formato inválido")
 	@Column(length = 14, nullable = false)
 	private String cnpj;
 	
 	@Size(max = 80)
 	private String logotipo;
 	
-	//transient - Para n�o ser armazenado em tabela
-	@UploadConstraint(acceptedTypes = FileType.PNG, message = "O arquivo n�o � um arquivo de imagem v�lido")
+	//transient - Para não ser armazenado em tabela
+	@UploadConstraint(acceptedTypes = FileType.PNG, message = "O arquivo não é um arquivo de imagem válido")
 	private transient MultipartFile logotipoFile;
 	
-	@NotNull(message = "A taxa de entrega n�o pode ser vazia")
+	@NotNull(message = "A taxa de entrega não pode ser vazia")
 	@Min(0)
 	@Max(99)
 	private BigDecimal taxaEntrega;
 	
-	@NotNull(message = "O tempo de entrega n�o pode ser vazio")
+	@NotNull(message = "O tempo de entrega não pode ser vazio")
 	@Min(0)
 	@Max(120)
 	private Integer tempoEntregaBase;
 	
-	@ManyToMany
+	/**
+	 * Define estratégias para buscar dados do banco de dados. 
+	 * A estratégia EAGER é um requisito no tempo de execução do 
+	 * provedor de persistência de que os dados devem ser buscados avidamente. 
+	 *	
+	 * A estratégia LAZY é uma dica para o tempo de execução do provedor de 
+	 * persistência de que os dados devem ser buscados lentamente quando forem 
+	 * acessados ​​pela primeira vez. 
+	 *	
+	 * A implementação tem permissão para buscar dados para os quais a dica de estratégia LAZY foi especificada. 
+	 *	
+	 * Exemplo: 
+	 * @Basic(fetch=LAZY) 
+	 * protected String getName() { 
+	 * 		return name; 
+	 * } 
+	 *	
+	 * Desde:1.0
+	 *	
+	 * Veja também:
+	 * Basic
+	 * Element
+	 * Collection
+	 * ManyToMany
+	 * OneToMany
+	 * ManyToOne
+	 * OneToOne
+	 */
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "restaurante_has_categoria",
 			joinColumns = @JoinColumn(name = "restaurante_id"),			
@@ -73,9 +104,34 @@ public class Restaurante extends Usuario {
 
 	public void setLogotipoFileName() {		
 		if (getId() == null) {
-			throw new IllegalStateException("� preciso primeiro gravar o registro");
+			throw new IllegalStateException("É preciso primeiro gravar o registro");
 		}
 				
 		this.logotipo = String.format("%04d-logo.%s", getId(), FileType.of(logotipoFile.getContentType()).getExtension());
+	}
+	
+	public String getCategoriasAsText() {
+		Set<String> strings = new LinkedHashSet<>();
+		
+		for (CategoriaRestaurante categoria : categorias) {
+			strings.add(categoria.getNome());
+		}
+		
+		return StringUtils.concatenate(strings);
+	}
+	
+	public Integer calcularTempoEntrega(String cep) {
+		int soma = 0;
+		
+		for (char c : cep.toCharArray()) {
+			int v = Character.getNumericValue(c);
+			if (v > 0) {
+				soma += v;
+			}
+		}
+		
+		soma /= 2;
+		
+		return tempoEntregaBase + soma;
 	}
 }
