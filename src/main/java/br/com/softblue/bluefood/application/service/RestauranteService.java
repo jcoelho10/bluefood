@@ -1,5 +1,8 @@
 package br.com.softblue.bluefood.application.service;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,39 +10,43 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.softblue.bluefood.domain.cliente.Cliente;
 import br.com.softblue.bluefood.domain.cliente.ClienteRepository;
 import br.com.softblue.bluefood.domain.restaurante.Restaurante;
+import br.com.softblue.bluefood.domain.restaurante.RestauranteComparator;
 import br.com.softblue.bluefood.domain.restaurante.RestauranteRepository;
+import br.com.softblue.bluefood.domain.restaurante.SearchFilter;
+import br.com.softblue.bluefood.domain.restaurante.SearchFilter.SearchType;
+import br.com.softblue.bluefood.util.SecurityUtils;
 
 /**
  * 
  * @author Nido
  *
- *Essa classe é uma espécie de Serviço de aplicação
- *É o que chamamos no DDD de ApplicationService
+ *Essa classe ï¿½ uma espï¿½cie de Serviï¿½o de aplicaï¿½ï¿½o
+ *ï¿½ o que chamamos no DDD de ApplicationService
  *
- *É uma classe que criamos quando precisamos agrupar (informações/operações) que não fazem sentindo 
- *está dentro da classe do domínio.
+ *ï¿½ uma classe que criamos quando precisamos agrupar (informaï¿½ï¿½es/operaï¿½ï¿½es) que nï¿½o fazem sentindo 
+ *estï¿½ dentro da classe do domï¿½nio.
  *
  *Por exemplo:
- *Na hora de salvar um cliente, temos uma serie de coisas pra fazer...ainda temos que validar se já não "existe" outro e-mail, temos que 
+ *Na hora de salvar um cliente, temos uma serie de coisas pra fazer...ainda temos que validar se jï¿½ nï¿½o "existe" outro e-mail, temos que 
  *fazer a criptrografia da senha do cliente. 
  *
- *Tudo isso são operações de negócio que tem que ser feito durante o processo de salvamento.
+ *Tudo isso sï¿½o operaï¿½ï¿½es de negï¿½cio que tem que ser feito durante o processo de salvamento.
  *
- *E não é interessante deixarmos o Controller fazer isso.
+ *E nï¿½o ï¿½ interessante deixarmos o Controller fazer isso.
  *
- *É muito importante separar as responsabilidades das coisas.
+ *ï¿½ muito importante separar as responsabilidades das coisas.
  *
  *Exemplo:
  *
- *A view/html ele só tem papel de mostrar as coisas.
- *	-Ele não tem que buscar inf no bd, processar dados, ele tem que receber tudo pronto pra mostrar.
+ *A view/html ele sï¿½ tem papel de mostrar as coisas.
+ *	-Ele nï¿½o tem que buscar inf no bd, processar dados, ele tem que receber tudo pronto pra mostrar.
  *
  * Controller
- * O papel do controller é receber o que a view/html/pagina mandar pra alguém fazer e depois pegar
+ * O papel do controller ï¿½ receber o que a view/html/pagina mandar pra alguï¿½m fazer e depois pegar
  * o resultado e direcionar para outra view.
- * -Ele não tem papel de acessar o BD, de fazer gravação, processamento de informação...nada disso.
+ * -Ele nï¿½o tem papel de acessar o BD, de fazer gravaï¿½ï¿½o, processamento de informaï¿½ï¿½o...nada disso.
  * 
- * Quando você quer fazer essas tarefas, agrupar um conjunto de tarefas que tem que ser realizados
+ * Quando vocï¿½ quer fazer essas tarefas, agrupar um conjunto de tarefas que tem que ser realizados
  * criamos um applicationservice pra fazer isso.
  */
 
@@ -58,7 +65,7 @@ public class RestauranteService {
 	@Transactional
 	public void saveRestaurante(Restaurante restaurante) throws ValidationException {
 		if(!validateEmail(restaurante.getEmail(), restaurante.getId())) {
-			throw new ValidationException("O e-mail está duplicado");
+			throw new ValidationException("O e-mail estï¿½ duplicado");
 		}				
 		
 		if (restaurante.getId() != null) {
@@ -70,17 +77,17 @@ public class RestauranteService {
 			restaurante.setLogotipoFileName();
 			
 			/**
-			 * Orientação MVC - Importante
+			 * OrientaÃ§Ã£o MVC - Importante
 			 * 
-			 * Service - Dentro dos seus services, você pode chamar o REPOSITORY ou outros SERVICES
-			 * 		- VOCÊ NÃO DEVE CHAMAR DENTRO DO SERVICE, UM CONTROLLER, porque foje a lógica(modelo) do MVC
+			 * Service - Dentro dos seus services, vocÃª pode chamar o REPOSITORY ou outros SERVICES
+			 * 		- VOCÃŠ NÃƒO DEVE CHAMAR DENTRO DO SERVICE, UM CONTROLLER, porque foje a lÃ³gica(modelo) do MVC
 			 * 
 			 * 		- MVC - O controler que faz o "meio de campo"
-			 * 			  - Você nuca faz a parte de NEGÓCIO chamar o CONTROLLER 
-			 * 			  - É o CONTROLLER que chama a parte de NEGÓCIO
+			 * 			  - VocÃª nuca faz a parte de NEGÃ“CIO chamar o CONTROLLER 
+			 * 			  - Ã‰ o CONTROLLER que chama a parte de NEGÃ“CIO
 			 * 
-			 * Controller - Dentro do controller, você pode chamar o REPOSITORY ou SERVICES
-			 * 		- CONTROLLER É SEMPRE CHAMADO A PARTIR DE UMA REQUISIÇÃO WEB
+			 * Controller - Dentro do controller, vocÃª pode chamar o REPOSITORY ou SERVICES
+			 * 		- CONTROLLER Ã‰ SEMPRE CHAMADO A PARTIR DE UMA REQUISIÃ‡ÃƒO WEB
 			 */
 			imageService.uploadLogotipo(restaurante.getLogotipoFile(), restaurante.getLogotipo());
 		}
@@ -106,5 +113,36 @@ public class RestauranteService {
 		}
 		
 		return true;
+	}
+	
+	public List<Restaurante> search(SearchFilter filter) {
+		List<Restaurante> restaurantes;
+		
+		if (filter.getSearchType() == SearchType.Texto) {
+			restaurantes = restauranteRepository.findByNomeIgnoreCaseContaining(filter.getTexto());
+		
+		} else if (filter.getSearchType() == SearchType.Categoria) {
+			restaurantes = restauranteRepository.findByCategorias_Id(filter.getCategoriaId());
+			
+		} else {
+			throw new IllegalArgumentException("O tipo de busca " + filter.getSearchType() + " não é suportado");
+		}
+		
+		Iterator<Restaurante> it = restaurantes.iterator();
+		
+		while(it.hasNext()) {
+			Restaurante restaurante = it.next();
+			double taxaEntrega = restaurante.getTaxaEntrega().doubleValue();
+			
+			if (filter.isEntregaGratis() && taxaEntrega > 0
+					|| !filter.isEntregaGratis() && taxaEntrega == 0) {
+				it.remove();
+			}
+		}
+		
+		RestauranteComparator comparator = new RestauranteComparator(filter, SecurityUtils.loggedCliente().getCep());
+		restaurantes.sort(comparator);
+		
+		return restaurantes;
 	}
 }
