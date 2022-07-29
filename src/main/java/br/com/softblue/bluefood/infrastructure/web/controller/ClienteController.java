@@ -20,9 +20,14 @@ import br.com.softblue.bluefood.application.service.RestauranteService;
 import br.com.softblue.bluefood.application.service.ValidationException;
 import br.com.softblue.bluefood.domain.cliente.Cliente;
 import br.com.softblue.bluefood.domain.cliente.ClienteRepository;
+import br.com.softblue.bluefood.domain.pedido.Pedido;
+import br.com.softblue.bluefood.domain.pedido.PedidoRepository;
 import br.com.softblue.bluefood.domain.restaurante.CategoriaRestaurante;
 import br.com.softblue.bluefood.domain.restaurante.CategoriaRestauranteRepository;
+import br.com.softblue.bluefood.domain.restaurante.ItemCardapio;
+import br.com.softblue.bluefood.domain.restaurante.ItemCardapioRepository;
 import br.com.softblue.bluefood.domain.restaurante.Restaurante;
+import br.com.softblue.bluefood.domain.restaurante.RestauranteRepository;
 import br.com.softblue.bluefood.domain.restaurante.SearchFilter;
 import br.com.softblue.bluefood.util.SecurityUtils;
 
@@ -36,6 +41,15 @@ public class ClienteController {
 	@Autowired
 	private CategoriaRestauranteRepository categoriaRestauranteRepository;
 	
+	@Autowired
+	private ItemCardapioRepository itemCardapioRepository;
+	
+	@Autowired
+	private RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
 	@Autowired	
 	private ClienteService clienteService;
 	
@@ -47,6 +61,9 @@ public class ClienteController {
 		List<CategoriaRestaurante> categorias = categoriaRestauranteRepository.findAll(Sort.by("nome"));
 		model.addAttribute("categorias", categorias);
 		model.addAttribute("searchFilter", new SearchFilter());
+		
+		List<Pedido> pedidos = pedidoRepository.listaPedidosByCliente(SecurityUtils.loggedCliente().getId());
+		model.addAttribute("pedidos", pedidos);
 		
 		return "cliente-home";
 	}
@@ -92,10 +109,75 @@ public class ClienteController {
 		model.addAttribute("restaurantes", restaurantes);
 		
 		model.addAttribute("searchType", filter);
+		model.addAttribute("cep", SecurityUtils.loggedCliente().getCep());
 		
 		ControllerHelper.addCategoriasToRequest(categoriaRestauranteRepository, model);
 		
-		
 		return "cliente-busca";
 	}
+	
+	@GetMapping(path = "/restaurante")
+	public String viewRestaurante(
+			@RequestParam("restauranteId") Integer restauranteId,
+			@RequestParam(value = "categoria", required = false) String categoria,
+			Model model) {
+		
+		Restaurante restaurante = restauranteRepository.findById(restauranteId).orElseThrow();
+		model.addAttribute("restaurante", restaurante);
+		model.addAttribute("cep", SecurityUtils.loggedCliente().getCep());
+		
+		List<String> categorias = itemCardapioRepository.findCategorias(restauranteId);
+		model.addAttribute("categorias", categorias);
+		
+		List<ItemCardapio> itensCardapioDestaque;
+		List<ItemCardapio> itensCardapioNaoDestaque;
+		
+		if (categoria == null) {
+			itensCardapioDestaque = itemCardapioRepository.findByRestaurante_IdAndDestaqueOrderByNome(restauranteId, true);
+			itensCardapioNaoDestaque = itemCardapioRepository.findByRestaurante_IdAndDestaqueOrderByNome(restauranteId, false);		
+		
+		} else {
+			itensCardapioDestaque = itemCardapioRepository.findByRestaurante_IdAndDestaqueAndCategoriaOrderByNome(restauranteId, true, categoria);
+			itensCardapioNaoDestaque = itemCardapioRepository.findByRestaurante_IdAndDestaqueAndCategoriaOrderByNome(restauranteId, false, categoria);		
+		}
+		
+		model.addAttribute("itensCardapioDestaque", itensCardapioDestaque);
+		model.addAttribute("itensCardapioNaoDestaque", itensCardapioNaoDestaque);
+		model.addAttribute("categoriaSelecionada", categoria);
+		
+		return "cliente-restaurante";
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
