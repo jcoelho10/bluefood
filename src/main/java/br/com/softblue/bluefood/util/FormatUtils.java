@@ -1,0 +1,38 @@
+package br.com.softblue.bluefood.util;
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class FormatUtils {
+
+	private static final Locale LOCALE_BRAZIL = new Locale("pt", "BR");
+	
+	public static NumberFormat newCurrencyFormat() {
+		NumberFormat nf = NumberFormat.getNumberInstance(LOCALE_BRAZIL);
+		
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
+		nf.setGroupingUsed(false);
+		
+		return nf;
+	}
+	
+	public static String formatCurrencyString(BigDecimal number) {
+		if (number == null) {
+			return null;
+		}
+		
+		return newCurrencyFormat().format(number);
+	}
+	
+	public static BigDecimal formatCurrencyBigDecimal(String source) {
+		if (StringUtils.isEmpty(source)) {
+			return null;
+		}
+		
+		source = source.replace(",", ".").trim();
+		
+		return BigDecimal.valueOf(Double.valueOf(source));		
+	}
+}

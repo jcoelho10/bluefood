@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.softblue.bluefood.domain.cliente.Cliente;
 import br.com.softblue.bluefood.domain.cliente.ClienteRepository;
+import br.com.softblue.bluefood.domain.restaurante.ItemCardapio;
+import br.com.softblue.bluefood.domain.restaurante.ItemCardapioRepository;
 import br.com.softblue.bluefood.domain.restaurante.Restaurante;
 import br.com.softblue.bluefood.domain.restaurante.RestauranteComparator;
 import br.com.softblue.bluefood.domain.restaurante.RestauranteRepository;
@@ -61,16 +63,22 @@ public class RestauranteService {
 	
 	@Autowired
 	private ImageService imageService;
+	
+	@Autowired 
+	private ItemCardapioRepository itemCardapioRepository;
 
 	@Transactional
 	public void saveRestaurante(Restaurante restaurante) throws ValidationException {
 		if(!validateEmail(restaurante.getEmail(), restaurante.getId())) {
-			throw new ValidationException("O e-mail estï¿½ duplicado");
+			throw new ValidationException("O e-mail está duplicado");
 		}				
 		
 		if (restaurante.getId() != null) {
 			Restaurante restauranteDB = restauranteRepository.findById(restaurante.getId()).orElseThrow();
 			restaurante.setSenha(restauranteDB.getSenha());
+			restaurante.setLogotipo(restauranteDB.getLogotipo());
+			restauranteRepository.save(restaurante);
+			
 		} else {
 			restaurante.encryptPassword();
 			restaurante = restauranteRepository.save(restaurante);
@@ -80,7 +88,7 @@ public class RestauranteService {
 			 * Orientação MVC - Importante
 			 * 
 			 * Service - Dentro dos seus services, você pode chamar o REPOSITORY ou outros SERVICES
-			 * 		- VOCÃŠ NÃO DEVE CHAMAR DENTRO DO SERVICE, UM CONTROLLER, porque foje a lógica(modelo) do MVC
+			 * 		- VOCêS NÃO DEVE CHAMAR DENTRO DO SERVICE, UM CONTROLLER, porque foje a lógica(modelo) do MVC
 			 * 
 			 * 		- MVC - O controler que faz o "meio de campo"
 			 * 			  - Você nunca faz a parte de NEGÓCIO chamar o CONTROLLER 
@@ -144,5 +152,12 @@ public class RestauranteService {
 		restaurantes.sort(comparator);
 		
 		return restaurantes;
+	}
+	
+	@Transactional
+	public void saveItemCardapio(ItemCardapio itemCardapio) {
+		itemCardapio = itemCardapioRepository.save(itemCardapio);
+		itemCardapio.setImagemFileName();
+		imageService.uploadComida(itemCardapio.getImagemFile(), itemCardapio.getImagem());
 	}
 }
