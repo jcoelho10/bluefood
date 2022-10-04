@@ -32,9 +32,9 @@ import lombok.Setter;
 public class Pedido implements Serializable {
 	
 	public enum Status {
-		Producao(1, "Em produção", false),
+		Producao(1, "Em produï¿½ï¿½o", false),
 		Entrega (2, "Saiu para entrega", false),
-		Concluido(3, "Concluído", true);
+		Concluido(3, "Concluï¿½do", true);
 		
 		Status(int ordem, String descricao, boolean ultimo) {
 			this.ordem = ordem;
@@ -99,7 +99,7 @@ public class Pedido implements Serializable {
 	private BigDecimal total;
 	
 	//relacionamento bidirecional com uma entidade que faz parte
-	//de uma chave primária de uma Outro Entidade 
+	//de uma chave primÃ¡ria de uma Outro Entidade 
 	@OneToMany(mappedBy = "id.pedido", fetch = FetchType.EAGER)
 	private Set<ItemPedido> itens;
 	

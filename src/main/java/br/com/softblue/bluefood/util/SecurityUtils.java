@@ -12,7 +12,7 @@ import br.com.softblue.bluefood.infrastructure.web.security.LoggedUser;
  * 
  * @author Nido
  * 
- * Classe com alguns utilit�rios de seguran�a
+ * Classe com alguns utilitários de segurança
  *
  */
 public class SecurityUtils {
@@ -22,7 +22,7 @@ public class SecurityUtils {
 		
 		/**
 		 * AnonymousAuthenticationToken
-		 * Autentica��o an�nima - Como se n�o tivese autenticado
+		 * Autenticação anônima - Como senão tivese autenticado
 		 */
 		if (authentication instanceof AnonymousAuthenticationToken) {
 			return null;

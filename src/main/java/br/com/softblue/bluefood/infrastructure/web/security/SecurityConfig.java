@@ -11,9 +11,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * 
-	 * @Bean - MÈtodos que produzem instancias
+	 * @Bean - M√©todos que produzem instancias
 	 * O spring sabe que quando precisar de um "AuthenticationSuccessHandler"
-	 * ele ir· chamar esse mÈtodo.	 * 
+	 * ele ir√° chamar esse m√©todo.	 
+	 *  
 	 */
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
@@ -22,8 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	
 	/**
-	 * Definindo regras de processo de autenticaÁ„o e 
-	 * autorizaÁ„o do que pode ou n„o acessar
+	 * Definindo regras de processo de autentica√ß√£o e 
+	 * autoriza√ß√£o do que pode ou n√£o acessar
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

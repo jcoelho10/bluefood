@@ -9,12 +9,12 @@ import java.nio.file.StandardCopyOption;
 
 public class IOUtils {
 
-	//Método para gravar o conteúdo de um arquivo em um diretório de destino
+	//MÃ©todo para gravar o conteÃºdo de um arquivo em um diretÃ³rio de destino
 	public static void copy(InputStream in, String fileName, String outputDir) throws IOException {
 		Files.copy(in, Paths.get(outputDir, fileName), StandardCopyOption.REPLACE_EXISTING);
 	}
 
-	//Método para pegar o caminho de um arquivo/imagem
+	//MÃ©todo para pegar o caminho de um arquivo/imagem
 	public static byte[] getBytes(Path path) throws IOException {
 		return Files.readAllBytes(path);
 	}

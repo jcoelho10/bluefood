@@ -37,7 +37,7 @@ public class PagamentoController {
 			/**
 			 * Redirect em Spring MVC
 			 * 
-			 * Normalmente usamos o Forward que faz um direcionamente interno para p·gina, 
+			 * Normalmente usamos o Forward que faz um direcionamente interno para p√°gina, 
 			 * nesse caso estamos pedindo para o navegador direcionar
 			 */
 			return "redirect:/cliente/pedido/view?pedidoId=" + pedido.getId();

@@ -42,20 +42,20 @@ public class Carrinho implements Serializable {
 		
 		} catch (RestauranteDiferenteException e) {						
 			/**
-			 * PRA ESSE CASO, A EXCE«√O FOI IGNORADA
+			 * PRA ESSE CASO, A EXCE√á√ÉO FOI IGNORADA
 			 * 
 			 * MOTIVO:
 			 * 
-			 * O sistema que vai chamar esse mÈtodo " adicionarItem(ItemPedido itemPedido) "
-			 * ser· o Sistema.
+			 * O sistema que vai chamar esse m√©todo " adicionarItem(ItemPedido itemPedido) "
+			 * ser√° o Sistema.
 			 * Ele vai chamar na hora de DUPLICAR o PEDIDO.
 			 * 
-			 * Ent„o n„o vai acontecer um PROBLEMA de querer colocar Item
+			 * Ent√£o n√£o vai acontecer um PROBLEMA de querer colocar Item
 			 * de Restaurante duplicado. 
 			 * 
-			 * Ele vai duplicar um Pedido que j· existe. Que j· era v·lido.
+			 * Ele vai duplicar um Pedido que j√° existe. Que j√° era v√°lido.
 			 * 
-			 * Ent„o n„o vai ter problema de DUPLICA ITENS DE RESTAURANTE DIFERERENTES
+			 * Ent√£o n√£o vai ter problema de DUPLICA ITENS DE RESTAURANTE DIFERERENTES
 			 */
 		}
 	}

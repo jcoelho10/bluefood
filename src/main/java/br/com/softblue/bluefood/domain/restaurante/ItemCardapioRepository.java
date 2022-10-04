@@ -11,16 +11,16 @@ public interface ItemCardapioRepository extends JpaRepository<ItemCardapio, Inte
 	 * JPQL da JPA
 	 * Trabalha apenas com elementos de objetos - CLASSES e ATRIBUTOS
 	 * 
-	 * A JPQL não trabalha com tabelas, colunas. Esqueçam os nomes das tabelas e colunas
+	 * A JPQL nÃ£o trabalha com tabelas, colunas. EsqueÃ§am os nomes das tabelas e colunas
 	 * do Banco de Dados
 	 * 
 	 * @param restauranteId
-	 * @return lista de categorias do cardápio
+	 * @return lista de categorias do cardÃ¡pio
 	 *  
 	 */
 	
-	//DISTINCT = Para não pegar duplicidade
-	//      ?1 = Pegar o primeiro parametro passado no método e coloca aí
+	//DISTINCT = Para nÃ£o pegar duplicidade
+	//      ?1 = Pegar o primeiro parametro passado no mÃ©todo e coloca aÃ­
 	@Query("SELECT DISTINCT ic.categoria FROM ItemCardapio ic WHERE ic.restaurante.id = ?1 ORDER BY ic.categoria")
 	public List<String> findCategorias(Integer restauranteId);	
 	

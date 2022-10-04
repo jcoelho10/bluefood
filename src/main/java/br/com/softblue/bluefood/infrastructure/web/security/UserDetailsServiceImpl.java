@@ -14,11 +14,11 @@ import br.com.softblue.bluefood.domain.usuario.Usuario;
  * 
  * @author Nido
  * 
- * Classe para carregar (UserDetailsService) o usu·rio e o
- * Spring verificar se esse usu·rio pode ser autenticado ou n„o.
+ * Classe para carregar (UserDetailsService) o usu√°rio e o
+ * Spring verificar se esse usu√°rio pode ser autenticado ou n√£o.
  *
  * O Spring identifica o @Service e o UserDetailsService, com isso,
- * ele sabe que È essa Classe que ele usa para carregar o usu·rio que
+ * ele sabe que √© essa Classe que ele usa para carregar o usu√°rio que
  * ele tem que autenticar.
  */
 

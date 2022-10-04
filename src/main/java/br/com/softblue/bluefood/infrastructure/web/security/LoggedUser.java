@@ -16,10 +16,10 @@ import br.com.softblue.bluefood.domain.usuario.Usuario;
  * @author Nido
  * 
  * Classe que o Spring utiliza pra representar um 
- * usu�rio logado.
+ * usuário logado.
  *
  *
- *OBS: Quem vai chamar esses m�todos, � o SPRING e ele se vira.
+ *OBS: Quem vai chamar esses métodos,é o SPRING e ele se vira.
  */
 
 @SuppressWarnings("serial")
@@ -50,12 +50,12 @@ public class LoggedUser implements UserDetails {
 	/**
 	 * getAuthorities
 	 * -Para pegar os Roles
-	 * � o termo que o Spring usa para referenciar perfis de acesso
+	 * é o termo que o Spring usa para referenciar perfis de acesso
 	 * 
-	 * No nosso caso, o usu�rio s� ter� 1 perfil.
+	 * No nosso caso, o usuário só terá 1 perfil.
 	 * 
-	 * Mas, a API � gen�rica o suficiente para suportar sistemas
-	 * que tenham (para 1 usu�rio) v�rios perfis de acessos.
+	 * Mas, a API é genérica o suficiente para suportar sistemas
+	 * que tenham (para 1 usuário) vários perfis de acessos.
 	 * Por isso ele retorna uma Collection<GrantedAuthority>
 	 */
 	@Override

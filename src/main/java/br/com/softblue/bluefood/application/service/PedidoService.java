@@ -63,8 +63,8 @@ public class PedidoService {
 		int ordem = 1;
 		
 		/**
-		 * ItemPedido n„o tem ID gerado Automaticamente
-		 * 		Ele tem um ID que È uma chave prim·ria composta
+		 * ItemPedido n√£o tem ID gerado Automaticamente
+		 * 		Ele tem um ID que √© uma chave prim√°ria composta
 		 * 		E eu que preciso dizer esse ID antes de gravar o item do pedido
 		 */
 		for(ItemPedido itemPedido : carrinho.getItens()) {
@@ -78,10 +78,10 @@ public class PedidoService {
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("Token", sbPayToken);
 		
-		//Inst‚ncia de envio via http de dados para o servidor
+		//Inst√¢ncia de envio via http de dados para o servidor
 		HttpEntity<DadosCartao> requestEntity = new HttpEntity<DadosCartao>(dadosCartao, headers);
 		
-		//Objeto para fazer invocaÁ„o de webservice
+		//Objeto para fazer invoca√ß√£o de webservice
 		RestTemplate restTemplate = new RestTemplate();
 		
 		Map<String, String> response;
