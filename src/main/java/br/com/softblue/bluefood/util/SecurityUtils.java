@@ -12,7 +12,7 @@ import br.com.softblue.bluefood.infrastructure.web.security.LoggedUser;
  * 
  * @author Nido
  * 
- * Classe com alguns utilitários de segurança
+ * Classe com alguns utilitï¿½rios de seguranï¿½a
  *
  */
 public class SecurityUtils {
@@ -22,7 +22,7 @@ public class SecurityUtils {
 		
 		/**
 		 * AnonymousAuthenticationToken
-		 * Autenticação anônima - Como se não tivese autenticado
+		 * Autenticaï¿½ï¿½o anï¿½nima - Como se nï¿½o tivese autenticado
 		 */
 		if (authentication instanceof AnonymousAuthenticationToken) {
 			return null;
@@ -35,11 +35,11 @@ public class SecurityUtils {
 		LoggedUser loggedUser = loggedUser();
 		
 		if (loggedUser == null) {
-			throw new IllegalStateException("Não existe um usuário logado");
+			throw new IllegalStateException("NÃ£o existe um usuÃ¡rio logado");
 		}
 		
 		if(!(loggedUser.getUsuario() instanceof Cliente)) {
-			throw new IllegalStateException("O usuário logado não é um cliente");
+			throw new IllegalStateException("O usuÃ¡rio logado nÃ£o Ã© um cliente");
 		}
 		
 		return (Cliente) loggedUser.getUsuario();
@@ -49,11 +49,11 @@ public class SecurityUtils {
 		LoggedUser loggedUser = loggedUser();
 		
 		if (loggedUser == null) {
-			throw new IllegalStateException("Não existe um usuário logado");
+			throw new IllegalStateException("NÃ£o existe um usuÃ¡rio logado");
 		}
 		
 		if(!(loggedUser.getUsuario() instanceof Restaurante)) {
-			throw new IllegalStateException("O usuário logado não é um restaurante");
+			throw new IllegalStateException("O usuÃ¡rio logado nÃ£o Ã© um restaurante");
 		}
 		
 		return (Restaurante) loggedUser.getUsuario();

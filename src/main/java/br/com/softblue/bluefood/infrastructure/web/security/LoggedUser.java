@@ -16,10 +16,10 @@ import br.com.softblue.bluefood.domain.usuario.Usuario;
  * @author Nido
  * 
  * Classe que o Spring utiliza pra representar um 
- * usuário logado.
+ * usuï¿½rio logado.
  *
  *
- *OBS: Quem vai chamar esses métodos, é o SPRING e ele se vira.
+ *OBS: Quem vai chamar esses mï¿½todos, ï¿½ o SPRING e ele se vira.
  */
 
 @SuppressWarnings("serial")
@@ -39,7 +39,7 @@ public class LoggedUser implements UserDetails {
 		} else if (usuario instanceof Restaurante) {
 			role = Role.RESTAURANTE;
 		} else {
-			throw new IllegalStateException("O tipo de usuário não é válido");
+			throw new IllegalStateException("O tipo de usuÃ¡rio nÃ£o Ã© vÃ¡lido");
 		}
 		
 		this.role = role;
@@ -50,12 +50,12 @@ public class LoggedUser implements UserDetails {
 	/**
 	 * getAuthorities
 	 * -Para pegar os Roles
-	 * É o termo que o Spring usa para referenciar perfis de acesso
+	 * ï¿½ o termo que o Spring usa para referenciar perfis de acesso
 	 * 
-	 * No nosso caso, o usuário só terá 1 perfil.
+	 * No nosso caso, o usuï¿½rio sï¿½ terï¿½ 1 perfil.
 	 * 
-	 * Mas, a API é genérica o suficiente para suportar sistemas
-	 * que tenham (para 1 usuário) vários perfis de acessos.
+	 * Mas, a API ï¿½ genï¿½rica o suficiente para suportar sistemas
+	 * que tenham (para 1 usuï¿½rio) vï¿½rios perfis de acessos.
 	 * Por isso ele retorna uma Collection<GrantedAuthority>
 	 */
 	@Override

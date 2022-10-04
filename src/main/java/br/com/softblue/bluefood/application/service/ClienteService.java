@@ -13,33 +13,33 @@ import br.com.softblue.bluefood.domain.restaurante.RestauranteRepository;
  * 
  * @author Nido
  *
- *Essa classe é uma espécie de Serviço de aplicação
- *É o que chamamos no DDD de ApplicationService
+ *Essa classe ï¿½ uma espï¿½cie de Serviï¿½o de aplicaï¿½ï¿½o
+ *ï¿½ o que chamamos no DDD de ApplicationService
  *
- *É uma classe que criamos quando precisamos agrupar (informações/operações) que não fazem sentindo 
- *está dentro da classe do domínio.
+ *ï¿½ uma classe que criamos quando precisamos agrupar (informaï¿½ï¿½es/operaï¿½ï¿½es) que nï¿½o fazem sentindo 
+ *estï¿½ dentro da classe do domï¿½nio.
  *
  *Por exemplo:
- *Na hora de salvar um cliente, temos uma serie de coisas pra fazer...ainda temos que validar se já não "existe" outro e-mail, temos que 
+ *Na hora de salvar um cliente, temos uma serie de coisas pra fazer...ainda temos que validar se jï¿½ nï¿½o "existe" outro e-mail, temos que 
  *fazer a criptrografia da senha do cliente. 
  *
- *Tudo isso são operações de negócio que tem que ser feito durante o processo de salvamento.
+ *Tudo isso sï¿½o operaï¿½ï¿½es de negï¿½cio que tem que ser feito durante o processo de salvamento.
  *
- *E não é interessante deixarmos o Controller fazer isso.
+ *E nï¿½o ï¿½ interessante deixarmos o Controller fazer isso.
  *
- *É muito importante separar as responsabilidades das coisas.
+ *ï¿½ muito importante separar as responsabilidades das coisas.
  *
  *Exemplo:
  *
- *A view/html ele só tem papel de mostrar as coisas.
- *	-Ele não tem que buscar inf no bd, processar dados, ele tem que receber tudo pronto pra mostrar.
+ *A view/html ele sï¿½ tem papel de mostrar as coisas.
+ *	-Ele nï¿½o tem que buscar inf no bd, processar dados, ele tem que receber tudo pronto pra mostrar.
  *
  * Controller
- * O papel do controller é receber o que a view/html/pagina mandar pra alguém fazer e depois pegar
+ * O papel do controller ï¿½ receber o que a view/html/pagina mandar pra alguï¿½m fazer e depois pegar
  * o resultado e direcionar para outra view.
- * -Ele não tem papel de acessar o BD, de fazer gravação, processamento de informação...nada disso.
+ * -Ele nï¿½o tem papel de acessar o BD, de fazer gravaï¿½ï¿½o, processamento de informaï¿½ï¿½o...nada disso.
  * 
- * Quando você quer fazer essas tarefas, agrupar um conjunto de tarefas que tem que ser realizados
+ * Quando vocï¿½ quer fazer essas tarefas, agrupar um conjunto de tarefas que tem que ser realizados
  * criamos um applicationservice pra fazer isso.
  */
 
@@ -55,7 +55,7 @@ public class ClienteService {
 	@Transactional
 	public void saveCliente(Cliente cliente) throws ValidationException {
 		if(!validateEmail(cliente.getEmail(), cliente.getId())) {
-			throw new ValidationException("O e-mail está duplicado");
+			throw new ValidationException("O e-mail estÃ¡ duplicado");
 		}
 		
 		if (cliente.getId() != null ) {

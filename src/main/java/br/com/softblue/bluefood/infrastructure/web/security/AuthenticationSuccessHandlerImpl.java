@@ -19,11 +19,11 @@ import br.com.softblue.bluefood.util.SecurityUtils;
  * - Classe SecurityConfig - ".successHandler(null)" - vamos trabalhar com ele.
  * 
  * - AuthenticationSuccessHandlerImpl
- * É uma classe utilizada pelo SPRINGDATA para ser chamada
- * quando dá a ocorrência do evento da Autenticação feita com sucesso!
+ * ï¿½ uma classe utilizada pelo SPRINGDATA para ser chamada
+ * quando dï¿½ a ocorrï¿½ncia do evento da Autenticaï¿½ï¿½o feita com sucesso!
  * 
- * E aqui direcionamos o usuário para um lado ou outro, dependendo se a 
- * autenticação foi feita com sucesso e se é CLIENTE ou RESTAURANTE.
+ * E aqui direcionamos o usuï¿½rio para um lado ou outro, dependendo se a 
+ * autenticaï¿½ï¿½o foi feita com sucesso e se ï¿½ CLIENTE ou RESTAURANTE.
  *
  *	
  */
@@ -46,7 +46,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 			response.sendRedirect("restaurante/home");
 			
 		} else {
-			throw new IllegalStateException("Erro na autenticação");
+			throw new IllegalStateException("Erro na autentiÃ§Ã£o");
 		}
 		
 		

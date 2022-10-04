@@ -39,7 +39,7 @@ import lombok.ToString;
 @Table(name = "restaurante")
 public class Restaurante extends Usuario {
 
-	@NotBlank(message = "O CNPJ nao pode ser vazio")
+	@NotBlank(message = "O CNPJ não pode ser vazio")
 	@Pattern(regexp = "[0-9]{14}", message = "O CNPJ possui formato inválido")
 	@Column(length = 14, nullable = false)
 	private String cnpj;
